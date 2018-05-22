@@ -61,7 +61,7 @@ TARGET_RECOVERY_DEVICE_MODULES := libinit_potter
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=30 msm_rtb.filter=0x237
-BOARD_KERNEL_CMDLINE += ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 vmalloc=350M
+BOARD_KERNEL_CMDLINE += ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 vmalloc=350M androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_IMAGE_NAME := Image.gz
 BOARD_KERNEL_PAGESIZE := 2048
@@ -130,9 +130,16 @@ TARGET_TAP_TO_WAKE_NODE := "/sys/android_touch/doubletap2wake"
 TARGET_HW_DISK_ENCRYPTION := true
 
 # Dexpreopt
-WITH_DEXPREOPT ?= true
-DONT_DEXPREOPT_PREBUILTS := true
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+#WITH_DEXPREOPT ?= true
+#DONT_DEXPREOPT_PREBUILTS := true
+#WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+# Dex
+ifeq ($(HOST_OS),linux)
+  ifneq ($(TARGET_BUILD_VARIANT),eng)
+    WITH_DEXPREOPT ?= true
+  endif
+endif
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
 
 # Display
 BOARD_USES_ADRENO := true
@@ -222,12 +229,6 @@ MOT_SENSOR_HUB_FEATURE_LA := true
 MOT_SENSOR_HUB_FEATURE_GR := true
 
 # Shim
-TARGET_LD_SHIM_LIBS := \
-    /system/vendor/bin/adspd|libshim_adsp.so \
-    /system/lib/lib_motsensorlistener.so|libsensor.so \
-    /system/lib/libjustshoot.so|libshims_camera.so \
-    /system/lib/hw/camera.vendor.msm8953.so|libshim_camera_hal.so \
-    /system/vendor/lib64/libmdmcutback.so|libqsap_shim.so
 
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
