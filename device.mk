@@ -232,6 +232,9 @@ PRODUCT_PACKAGES += \
 # Display Calibration
 PRODUCT_PACKAGES += \
     libjni_livedisplay
+# Doze mode
+PRODUCT_PACKAGES += \
+OneplusThreeDoze
 
 # DRM
 PRODUCT_PACKAGES += \
